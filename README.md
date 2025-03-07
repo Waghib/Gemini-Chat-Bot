@@ -1,5 +1,7 @@
 # Gemini Chat Application
 
+![Gemini Chat Application](image.png)
+
 A chat application using React for the frontend, Node.js for the backend, and MongoDB for storing conversation history. The application uses Google's Gemini API for generating responses.
 
 ## Features
