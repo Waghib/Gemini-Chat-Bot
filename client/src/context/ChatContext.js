@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { sendMessage, getConversations, getConversation } from '../utils/api';
+import { sendMessage, getConversations, getConversation, deleteConversation } from '../utils/api';
 
 const ChatContext = createContext();
 
@@ -95,6 +95,37 @@ export const ChatProvider = ({ children }) => {
     setMessages([]);
   };
 
+  // Delete a conversation
+  const handleDeleteConversation = async (conversationId, event) => {
+    // Stop the event from bubbling up to parent elements
+    if (event) {
+      event.stopPropagation();
+    }
+    
+    try {
+      setLoading(true);
+      await deleteConversation(conversationId);
+      
+      // Remove the deleted conversation from the state
+      setConversations(prevConversations => 
+        prevConversations.filter(conv => conv._id !== conversationId)
+      );
+      
+      // If the deleted conversation was the current one, clear it
+      if (currentConversation && currentConversation._id === conversationId) {
+        setCurrentConversation(null);
+        setMessages([]);
+      }
+      
+      setError(null);
+    } catch (err) {
+      setError('Failed to delete conversation');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Load conversations on component mount
   useEffect(() => {
     fetchConversations();
@@ -109,7 +140,8 @@ export const ChatProvider = ({ children }) => {
     fetchConversations,
     fetchConversation,
     handleSendMessage,
-    startNewChat
+    startNewChat,
+    handleDeleteConversation
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

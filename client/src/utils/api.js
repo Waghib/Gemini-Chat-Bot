@@ -41,4 +41,14 @@ export const getConversation = async (conversationId) => {
   }
 };
 
+export const deleteConversation = async (conversationId) => {
+  try {
+    const response = await api.delete(`/chat/conversations/${conversationId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting conversation:', error);
+    throw error;
+  }
+};
+
 export default api;
