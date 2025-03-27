@@ -51,6 +51,9 @@ export const ChatProvider = ({ children }) => {
       setLoading(true);
       const conversationId = currentConversation?._id;
       
+      console.log('Sending message to backend:', message);
+      console.log('Current conversation ID:', conversationId);
+      
       // Add the user message to the UI immediately
       const userMessage = {
         _id: Date.now().toString(),
@@ -62,7 +65,9 @@ export const ChatProvider = ({ children }) => {
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       
       // Send to API
+      console.log('Calling API at:', '/chat/send');
       const response = await sendMessage(message, conversationId);
+      console.log('Received response from API:', response);
       
       // Add AI response to messages
       const aiMessage = {
@@ -83,7 +88,15 @@ export const ChatProvider = ({ children }) => {
       setError(null);
     } catch (err) {
       setError('Failed to send message');
-      console.error(err);
+      console.error('Error in handleSendMessage:', err);
+      if (err.response) {
+        console.error('Response status:', err.response.status);
+        console.error('Response data:', err.response.data);
+      } else if (err.request) {
+        console.error('No response received from server. Request:', err.request);
+      } else {
+        console.error('Error message:', err.message);
+      }
     } finally {
       setLoading(false);
     }
