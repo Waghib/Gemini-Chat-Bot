@@ -140,8 +140,40 @@ const getConversation = async (req, res) => {
   }
 };
 
+// Delete a specific conversation and its messages
+const deleteConversation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Find the conversation
+    const conversation = await Conversation.findById(id);
+    
+    if (!conversation) {
+      return res.status(404).json({ error: 'Conversation not found' });
+    }
+    
+    // Delete all messages associated with this conversation
+    await Message.deleteMany({ conversationId: id });
+    
+    // Delete the conversation
+    await Conversation.findByIdAndDelete(id);
+    
+    return res.status(200).json({ 
+      message: 'Conversation deleted successfully',
+      deletedId: id
+    });
+  } catch (error) {
+    console.error('Error in deleteConversation:', error);
+    return res.status(500).json({ 
+      error: 'Failed to delete conversation',
+      details: error.message 
+    });
+  }
+};
+
 module.exports = {
   sendMessage,
   getConversations,
-  getConversation
+  getConversation,
+  deleteConversation
 };

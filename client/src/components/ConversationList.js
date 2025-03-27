@@ -8,7 +8,8 @@ const ConversationList = () => {
     currentConversation, 
     fetchConversation, 
     startNewChat, 
-    loading 
+    loading,
+    handleDeleteConversation
   } = useChatContext();
 
   const handleSelectConversation = (conversationId) => {
@@ -39,12 +40,23 @@ const ConversationList = () => {
               className={`conversation-item ${
                 currentConversation?._id === conversation._id ? 'active' : ''
               }`}
-              onClick={() => handleSelectConversation(conversation._id)}
             >
-              <div className="conversation-title">{conversation.title}</div>
-              <div className="conversation-date">
-                {new Date(conversation.updatedAt).toLocaleDateString()}
+              <div 
+                className="conversation-content"
+                onClick={() => handleSelectConversation(conversation._id)}
+              >
+                <div className="conversation-title">{conversation.title}</div>
+                <div className="conversation-date">
+                  {new Date(conversation.updatedAt).toLocaleDateString()}
+                </div>
               </div>
+              <button 
+                className="delete-conversation-btn"
+                onClick={(e) => handleDeleteConversation(conversation._id, e)}
+                title="Delete conversation"
+              >
+                <span>×</span>
+              </button>
             </div>
           ))
         )}
