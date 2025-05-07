@@ -1,6 +1,6 @@
 // Load environment variables first with explicit path
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const express = require('express');
 const cors = require('cors');
@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/gemini-ch
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, () => {MONGODB_URI
   console.log(`Server running on port ${PORT}`);
   console.log('Environment variables loaded:', {
     PORT: process.env.PORT,
