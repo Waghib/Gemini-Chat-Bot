@@ -19,8 +19,11 @@ services:
       - NODE_ENV=production
       - PORT=5000
       - MONGODB_URI=mongodb://mongo:27017/gemini-chat
-      # Add your Gemini API key here or through .env file
-      # - GEMINI_API_KEY=your_api_key_here
+      # Replace with your actual API key
+      - GEMINI_API_KEY=AIzaSyC07Bo757poAL62RFGp2ALS_fq_5Ql4BJQ
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     depends_on:
       - mongo
     restart: unless-stopped
