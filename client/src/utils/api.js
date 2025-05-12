@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Use localhost for API calls
 const API_URL = 'http://localhost:5000/api';
 
 // Create axios instance with detailed logging

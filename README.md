@@ -17,12 +17,48 @@ A chat application using React for the frontend, Node.js for the backend, and Mo
 - MongoDB (local or Atlas cloud instance)
 - Google Gemini API key
 - Docker and Docker Compose (for containerized setup)
+- Azure VM or similar cloud server (for production deployment)
 
 ## Setup Instructions
 
-You can run this application either traditionally or using Docker.
+You can run this application either traditionally, using Docker locally, or deploy it to your Azure VM.
 
-### Option 1: Docker Setup (Recommended)
+### Option 1: Azure VM Deployment (Production)
+
+1. **SSH into your Azure VM:**
+   ```
+   ssh yourusername@20.94.44.47
+   ```
+
+2. **Clone the repository:**
+   ```
+   git clone <repository-url>
+   cd Gemini-Chat-Bot
+   ```
+
+3. **Set your Gemini API key** in the docker-compose.yml file:
+   ```yaml
+   # In docker-compose.yml
+   services:
+     server:
+       environment:
+         # Replace with your actual API key
+         - GEMINI_API_KEY=your_actual_api_key_here
+   ```
+
+4. **Make sure ports are open in Azure:**
+   - Open ports 80 (HTTP), 5000 (API), and 27017 (MongoDB) in your Azure Network Security Group
+
+5. **Build and start the containers:**
+   ```
+   docker-compose up -d
+   ```
+
+6. **Access the application:**
+   - Frontend: http://20.94.44.47 (port 80)
+   - Backend API: http://20.94.44.47:5000
+
+### Option 2: Docker Setup (Local Development)
 
 1. **Clone the repository:**
    ```
@@ -49,17 +85,7 @@ You can run this application either traditionally or using Docker.
    - Frontend: http://localhost (port 80)
    - Backend API: http://localhost:5000
 
-5. **View logs for debugging:**
-   ```
-   docker-compose logs -f
-   ```
-
-6. **Stop the application:**
-   ```
-   docker-compose down
-   ```
-
-### Option 2: Traditional Setup
+### Option 3: Traditional Setup
 
 #### Backend Setup
 
@@ -122,6 +148,22 @@ When running with Docker, the application consists of three containers:
    - React application served via Nginx
    - Port: 80
    - Communicates with the backend API
+
+## Azure VM Security Considerations
+
+When deploying to Azure VM, consider these security measures:
+
+1. **Restrict MongoDB access:**
+   - For production, update docker-compose.yml to not expose MongoDB port to the public
+   - Use a firewall to restrict access to your VM
+
+2. **Use HTTPS:**
+   - For production use, configure Nginx with SSL certificates
+   - You can use Let's Encrypt for free certificates
+
+3. **Environment Variables:**
+   - Store sensitive data like API keys in Azure Key Vault
+   - Use environment files rather than hardcoding values
 
 ## How to Get a Gemini API Key
 
